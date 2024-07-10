@@ -1,7 +1,7 @@
 # go-zabbix7
 
 ## Introduction
-go-zabbix7 is a Go client library for interacting with the Zabbix 7.0 API. It provides a convenient way to interact with the API using Go.
+go-zabbix7 is a Go client library for interacting with the Zabbix 7.0 API. It provides a convenient way to interact with the API using Go. Currently, this library is in the development stage, with ongoing updates and new features being added.
 
 ## Installation
 To install the library, use the following command:
