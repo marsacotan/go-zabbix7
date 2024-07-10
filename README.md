@@ -1,8 +1,25 @@
 # go-zabbix7
-Go client library for Zabbix 7.0 API
 
-#### Capability
-- User Authentication: Easily log into the Zabbix API using the provided credentials.
-- Data Retrieval: Get data from Zabbix including user details and other metrics.
-- Extensible: Designed to be easily extensible with additional API methods.
-- HTTPS Support: Supports secure communication with the Zabbix API using HTTPS.
+## Introduction
+go-zabbix7 is a Go client library for interacting with the Zabbix 7.0 API. It provides a convenient way to interact with the API using Go.
+
+## Installation
+To install the library, use the following command:
+
+```sh
+go get github.com/marsacotan/go-zabbix7/api
+```
+
+## Note
+This library does not support Windows.
+
+If you encounter issues while using this library on Windows, please consider using a Unix-based operating system such as Linux or macOS for development and deployment.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request on GitHub.
+
+## Contact
+For questions or support, please open an issue on GitHub.
