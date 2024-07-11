@@ -6,37 +6,32 @@ import (
 	"github.com/marsacotan/go-zabbix7/utils"
 )
 
-type TLSVerifyOptions struct {
-	InsecureSkipVerify bool
-	CertPath           string
-}
-
 type Client struct {
 	HTTPClient *http.Client
-	APIURL     string
-	APITOKEN   string
+	URL        string
+	Token      string
+	User       string
+	Passwd     string
 }
 
-func NewClient(apiURL string, opt TLSVerifyOptions, token ...string) *Client {
-
-	var apiToken string
-
-	if len(token) > 0 {
-		apiToken = token[0]
-	}
-
-	if !opt.InsecureSkipVerify {
-
+// Creating an http client is secure by default, which means TLS verification is required.
+// The default value of config.InsecureSkipVerify is False, which returns an http client with TLS verification enabled.
+// If you want to skip TLS verification, you need to set it to True
+func NewClient(config *ClientConfig) *Client {
+	if !config.InsecureSkipVerify {
 		return &Client{
-			HTTPClient: utils.CreateTLSVerifyHTTPClient(opt.CertPath),
-			APIURL:     apiURL,
-			APITOKEN:   apiToken,
+			HTTPClient: utils.CreateTLSVerifyHTTPClient(config.CertPath),
+			URL:        config.URL,
+			User:       config.User,
+			Passwd:     config.Passwd,
+			Token:      config.Token,
 		}
 	}
-
 	return &Client{
 		HTTPClient: utils.CreateHTTPClient(),
-		APIURL:     apiURL,
-		APITOKEN:   apiToken,
+		URL:        config.URL,
+		User:       config.User,
+		Passwd:     config.Passwd,
+		Token:      config.Token,
 	}
 }

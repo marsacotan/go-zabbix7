@@ -9,14 +9,14 @@ import (
 )
 
 // Get a token.
-func (c *Client) GetToken(username string, password string) (types.UserLoginTokenResponse, error) {
+func (c *Client) GetToken() (types.UserLoginTokenResponse, error) {
 
 	reqBody := types.UserLoginRequest{
 		JSONRPC: "2.0",
 		Method:  "user.login",
 		Params: types.UserLoginParams{
-			Username: username,
-			Password: password,
+			Username: c.User,
+			Password: c.Passwd,
 		},
 		ID: 1,
 	}
@@ -26,7 +26,7 @@ func (c *Client) GetToken(username string, password string) (types.UserLoginToke
 		return types.UserLoginTokenResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.APIURL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.UserLoginTokenResponse{}, err
 	}
@@ -52,14 +52,14 @@ func (c *Client) GetToken(username string, password string) (types.UserLoginToke
 }
 
 // Get other information about the authenticated user.
-func (c *Client) GetUserData(username, password string) (types.UserLoginUserDataResponse, error) {
+func (c *Client) GetUserData() (types.UserLoginUserDataResponse, error) {
 
 	reqBody := types.UserLoginRequest{
 		JSONRPC: "2.0",
 		Method:  "user.login",
 		Params: types.UserLoginParams{
-			Username: username,
-			Password: password,
+			Username: c.User,
+			Password: c.Passwd,
 			UserData: true,
 		},
 		ID: 1,
@@ -70,7 +70,7 @@ func (c *Client) GetUserData(username, password string) (types.UserLoginUserData
 		return types.UserLoginUserDataResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.APIURL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.UserLoginUserDataResponse{}, err
 	}
