@@ -1,5 +1,7 @@
 package api
 
+import "github.com/marsacotan/go-zabbix7/utils"
+
 type ClientConfig struct {
 	URL                string
 	User               string
@@ -9,12 +11,16 @@ type ClientConfig struct {
 	CertPath           string
 }
 
-func NewClientConfig(url, user, passwd string) *ClientConfig {
+func NewClientConfig(url string) *ClientConfig {
 	return &ClientConfig{
-		URL:    url,
-		User:   user,
-		Passwd: passwd,
+		URL: url,
 	}
+}
+
+func (c *ClientConfig) WithLoginCred(user, passwd string) *ClientConfig {
+	c.User = user
+	c.Passwd = passwd
+	return c
 }
 
 func (c *ClientConfig) WithToken(token string) *ClientConfig {
@@ -30,4 +36,8 @@ func (c *ClientConfig) WithSkipTlsVerify(insecureSkipVerify bool) *ClientConfig 
 func (c *ClientConfig) WithCertPath(certPath string) *ClientConfig {
 	c.CertPath = certPath
 	return c
+}
+
+func UseLocalEnvToken(envVar string) string {
+	return utils.GetEnv(envVar)
 }
