@@ -26,13 +26,13 @@ func (c *Client) CreatePermanentTokenForUser(name string, userid string) (types.
 		return types.TokenCreateResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", c.Config.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.TokenCreateResponse{}, err
 	}
 
 	req.Header.Set("Content-Type", "application/json-rpc")
-	req.Header.Set("Authorization", "Bearer "+c.Token)
+	req.Header.Set("Authorization", "Bearer "+c.Config.AuthToken)
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
@@ -70,13 +70,13 @@ func (c *Client) CreateUserTokenWithExpiration(name string, status string, expir
 		return types.TokenCreateResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", c.Config.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.TokenCreateResponse{}, err
 	}
 
 	req.Header.Set("Content-Type", "application/json-rpc")
-	req.Header.Set("Authorization", "Bearer "+c.Token)
+	req.Header.Set("Authorization", "Bearer "+c.Config.AuthToken)
 
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {

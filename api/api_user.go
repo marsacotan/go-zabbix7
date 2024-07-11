@@ -15,8 +15,8 @@ func (c *Client) GetToken() (types.UserLoginTokenResponse, error) {
 		JSONRPC: "2.0",
 		Method:  "user.login",
 		Params: types.UserLoginParams{
-			Username: c.User,
-			Password: c.Passwd,
+			Username: c.Config.User,
+			Password: c.Config.Passwd,
 		},
 		ID: 1,
 	}
@@ -26,7 +26,7 @@ func (c *Client) GetToken() (types.UserLoginTokenResponse, error) {
 		return types.UserLoginTokenResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", c.Config.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.UserLoginTokenResponse{}, err
 	}
@@ -58,8 +58,8 @@ func (c *Client) GetUserData() (types.UserLoginUserDataResponse, error) {
 		JSONRPC: "2.0",
 		Method:  "user.login",
 		Params: types.UserLoginParams{
-			Username: c.User,
-			Password: c.Passwd,
+			Username: c.Config.User,
+			Password: c.Config.Passwd,
 			UserData: true,
 		},
 		ID: 1,
@@ -70,7 +70,7 @@ func (c *Client) GetUserData() (types.UserLoginUserDataResponse, error) {
 		return types.UserLoginUserDataResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", c.Config.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.UserLoginUserDataResponse{}, err
 	}

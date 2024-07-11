@@ -2,38 +2,38 @@ package api
 
 import "github.com/marsacotan/go-zabbix7/utils"
 
-type ClientConfig struct {
+type Config struct {
 	URL                string
 	User               string
 	Passwd             string
-	Token              string
+	AuthToken          string
 	InsecureSkipVerify bool
 	CertPath           string
 }
 
-func NewClientConfig(url string) *ClientConfig {
-	return &ClientConfig{
+func NewConfig(url string) *Config {
+	return &Config{
 		URL: url,
 	}
 }
 
-func (c *ClientConfig) WithLoginCred(user, passwd string) *ClientConfig {
+func (c *Config) WithLoginCred(user, passwd string) *Config {
 	c.User = user
 	c.Passwd = passwd
 	return c
 }
 
-func (c *ClientConfig) WithToken(token string) *ClientConfig {
-	c.Token = token
+func (c *Config) WithToken(token string) *Config {
+	c.AuthToken = token
 	return c
 }
 
-func (c *ClientConfig) WithSkipTlsVerify(insecureSkipVerify bool) *ClientConfig {
+func (c *Config) WithSkipTlsVerify(insecureSkipVerify bool) *Config {
 	c.InsecureSkipVerify = insecureSkipVerify
 	return c
 }
 
-func (c *ClientConfig) WithCertPath(certPath string) *ClientConfig {
+func (c *Config) WithCertPath(certPath string) *Config {
 	c.CertPath = certPath
 	return c
 }
