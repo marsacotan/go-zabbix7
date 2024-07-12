@@ -11,7 +11,7 @@ type Config struct {
 	CertPath           string
 }
 
-func NewConfig(url string) *Config {
+func ConfigConn(url string) *Config {
 	return &Config{
 		URL: url,
 	}
@@ -38,6 +38,6 @@ func (c *Config) WithCertPath(certPath string) *Config {
 	return c
 }
 
-func UseLocalEnvToken(envVar string) string {
+func WithLocalEnvToken(envVar string) string {
 	return utils.GetEnv(envVar)
 }

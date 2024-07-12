@@ -9,7 +9,7 @@ import (
 )
 
 // Creates an enabled token that never expires and authenticates the specified user.
-func (c *Client) CreatePermanentTokenForUser(name string, userid string) (types.TokenCreateResponse, error) {
+func (t *TokenAPI) CreatePermanentTokenForUser(name string, userid string) (types.TokenCreateResponse, error) {
 
 	reqBody := types.CreatePermanentTokenForUserRequest{
 		JSONRPC: "2.0",
@@ -26,15 +26,15 @@ func (c *Client) CreatePermanentTokenForUser(name string, userid string) (types.
 		return types.TokenCreateResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.Config.URL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", t.Config.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.TokenCreateResponse{}, err
 	}
 
 	req.Header.Set("Content-Type", "application/json-rpc")
-	req.Header.Set("Authorization", "Bearer "+c.Config.AuthToken)
+	req.Header.Set("Authorization", "Bearer "+t.Config.AuthToken)
 
-	resp, err := c.HTTPClient.Do(req)
+	resp, err := t.Client.Do(req)
 	if err != nil {
 		return types.TokenCreateResponse{}, err
 	}
@@ -53,7 +53,7 @@ func (c *Client) CreatePermanentTokenForUser(name string, userid string) (types.
 }
 
 // Creates a token with a specified expiration time that authenticates the current user.
-func (c *Client) CreateUserTokenWithExpiration(name string, status string, expires_at int64) (types.TokenCreateResponse, error) {
+func (c *TokenAPI) CreateUserTokenWithExpiration(name string, status string, expires_at int64) (types.TokenCreateResponse, error) {
 	reqBody := types.CreateUserTokenWithExpirationRequest{
 		JSONRPC: "2.0",
 		Method:  "token.create",
@@ -78,7 +78,7 @@ func (c *Client) CreateUserTokenWithExpiration(name string, status string, expir
 	req.Header.Set("Content-Type", "application/json-rpc")
 	req.Header.Set("Authorization", "Bearer "+c.Config.AuthToken)
 
-	resp, err := c.HTTPClient.Do(req)
+	resp, err := c.Client.Do(req)
 	if err != nil {
 		return types.TokenCreateResponse{}, err
 	}

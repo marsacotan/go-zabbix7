@@ -9,14 +9,14 @@ import (
 )
 
 // Get a token.
-func (c *Client) GetToken() (types.UserLoginTokenResponse, error) {
+func (u *UserAPI) GetToken() (types.UserLoginTokenResponse, error) {
 
 	reqBody := types.UserLoginRequest{
 		JSONRPC: "2.0",
 		Method:  "user.login",
 		Params: types.UserLoginParams{
-			Username: c.Config.User,
-			Password: c.Config.Passwd,
+			Username: u.Config.User,
+			Password: u.Config.Passwd,
 		},
 		ID: 1,
 	}
@@ -26,14 +26,15 @@ func (c *Client) GetToken() (types.UserLoginTokenResponse, error) {
 		return types.UserLoginTokenResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.Config.URL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", u.Config.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.UserLoginTokenResponse{}, err
 	}
 
 	req.Header.Set("Content-Type", "application/json-rpc")
 
-	resp, err := c.HTTPClient.Do(req)
+	resp, err := u.Client.Do(req)
+
 	if err != nil {
 		return types.UserLoginTokenResponse{}, err
 	}
@@ -52,14 +53,14 @@ func (c *Client) GetToken() (types.UserLoginTokenResponse, error) {
 }
 
 // Get other information about the authenticated user.
-func (c *Client) GetUserData() (types.UserLoginUserDataResponse, error) {
+func (u *UserAPI) GetUserData() (types.UserLoginUserDataResponse, error) {
 
 	reqBody := types.UserLoginRequest{
 		JSONRPC: "2.0",
 		Method:  "user.login",
 		Params: types.UserLoginParams{
-			Username: c.Config.User,
-			Password: c.Config.Passwd,
+			Username: u.Config.User,
+			Password: u.Config.Passwd,
 			UserData: true,
 		},
 		ID: 1,
@@ -70,13 +71,13 @@ func (c *Client) GetUserData() (types.UserLoginUserDataResponse, error) {
 		return types.UserLoginUserDataResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", c.Config.URL, bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest("POST", u.Config.URL, bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return types.UserLoginUserDataResponse{}, err
 	}
 	req.Header.Set("Content-Type", "application/json-rpc")
 
-	resp, err := c.HTTPClient.Do(req)
+	resp, err := u.Client.Do(req)
 
 	if err != nil {
 		return types.UserLoginUserDataResponse{}, err

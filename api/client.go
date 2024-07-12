@@ -1,28 +1,23 @@
 package api
 
-import (
-	"net/http"
-
-	"github.com/marsacotan/go-zabbix7/utils"
-)
-
-type Client struct {
-	HTTPClient *http.Client
-	Config     *Config
-}
+import "github.com/marsacotan/go-zabbix7/utils"
 
 // Creating an http client is secure by default, which means TLS verification is required.
 // The default value of config.InsecureSkipVerify is False, which returns an http client with TLS verification enabled.
 // If you want to skip TLS verification, you need to set it to True
-func NewZbxClient(config *Config) *Client {
+func NewClient(config *Config) *API {
 	if !config.InsecureSkipVerify {
-		return &Client{
-			HTTPClient: utils.CreateTLSVerifyHTTPClient(config.CertPath),
-			Config:     config,
+		httpClient := utils.CreateTLSVerifyHTTPClient(config.CertPath)
+		return &API{
+			Config: config,
+			User:   UserAPI{Config: config, Client: httpClient},
+			Token:  TokenAPI{Config: config, Client: httpClient},
 		}
 	}
-	return &Client{
-		HTTPClient: utils.CreateHTTPClient(),
-		Config:     config,
+	httpClient := utils.CreateHTTPClient()
+	return &API{
+		Config: config,
+		User:   UserAPI{Config: config, Client: httpClient},
+		Token:  TokenAPI{Config: config, Client: httpClient},
 	}
 }
