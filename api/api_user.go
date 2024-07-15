@@ -31,24 +31,9 @@ import (
 	"github.com/marsacotan/go-zabbix7/types"
 )
 
-// This is the implementation of the user.login method in the Zabbix API.
-func (u *UserAPI) GetToken() (types.UserLoginTokenResponse, error) {
-	resp, err := u.makeUserLoginRequest(false)
-	if err != nil {
-		return types.UserLoginTokenResponse{}, err
-	}
-	return resp.(types.UserLoginTokenResponse), nil
-}
-
-func (u *UserAPI) GetUserData() (types.UserLoginUserDataResponse, error) {
-	resp, err := u.makeUserLoginRequest(true)
-	if err != nil {
-		return types.UserLoginUserDataResponse{}, err
-	}
-	return resp.(types.UserLoginUserDataResponse), nil
-}
-
-func (u *UserAPI) makeUserLoginRequest(userData bool) (interface{}, error) {
+// UserLogin performs the user.login method in the Zabbix API.
+// It returns either UserLoginTokenResponse or UserLoginUserDataResponse based on the userData parameter.
+func (u *UserAPI) UserLogin(userData *bool) (interface{}, error) {
 	reqBody := types.UserLoginRequest{
 		JSONRPC: DefaultJSONRPC,
 		Method:  UserLogin,
@@ -81,7 +66,7 @@ func (u *UserAPI) makeUserLoginRequest(userData bool) (interface{}, error) {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	if userData {
+	if *userData {
 		var resBody types.UserLoginUserDataResponse
 		if err := json.NewDecoder(resp.Body).Decode(&resBody); err != nil {
 			return nil, err
@@ -94,6 +79,34 @@ func (u *UserAPI) makeUserLoginRequest(userData bool) (interface{}, error) {
 		}
 		return resBody, nil
 	}
+}
+
+// GetToken retrieves the user login token.
+func (u *UserAPI) GetToken() (types.UserLoginTokenResponse, error) {
+	var flag bool = false
+	resp, err := u.UserLogin(&flag)
+	if err != nil {
+		return types.UserLoginTokenResponse{}, err
+	}
+	tokenResp, ok := resp.(types.UserLoginTokenResponse)
+	if !ok {
+		return types.UserLoginTokenResponse{}, fmt.Errorf("unexpected response type")
+	}
+	return tokenResp, nil
+}
+
+// GetUserData retrieves the user data.
+func (u *UserAPI) GetUserData() (types.UserLoginUserDataResponse, error) {
+	var flag bool = true
+	resp, err := u.UserLogin(&flag)
+	if err != nil {
+		return types.UserLoginUserDataResponse{}, err
+	}
+	userDataResp, ok := resp.(types.UserLoginUserDataResponse)
+	if !ok {
+		return types.UserLoginUserDataResponse{}, fmt.Errorf("unexpected response type")
+	}
+	return userDataResp, nil
 }
 
 // This is the implementation of the user.create method in the Zabbix API.
