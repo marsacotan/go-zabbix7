@@ -33,7 +33,7 @@ import (
 
 // UserLogin performs the user.login method in the Zabbix API.
 // It returns either UserLoginTokenResponse or UserLoginUserDataResponse based on the userData parameter.
-func (u *UserAPI) UserLogin(userData *bool) (interface{}, error) {
+func (u *UserAPI) userLogin(userData *bool) (interface{}, error) {
 	reqBody := types.UserLoginRequest{
 		JSONRPC: DefaultJSONRPC,
 		Method:  UserLogin,
@@ -84,7 +84,7 @@ func (u *UserAPI) UserLogin(userData *bool) (interface{}, error) {
 // GetToken retrieves the user login token.
 func (u *UserAPI) GetToken() (types.UserLoginTokenResponse, error) {
 	var flag bool = false
-	resp, err := u.UserLogin(&flag)
+	resp, err := u.userLogin(&flag)
 	if err != nil {
 		return types.UserLoginTokenResponse{}, err
 	}
@@ -98,7 +98,7 @@ func (u *UserAPI) GetToken() (types.UserLoginTokenResponse, error) {
 // GetUserData retrieves the user data.
 func (u *UserAPI) GetUserData() (types.UserLoginUserDataResponse, error) {
 	var flag bool = true
-	resp, err := u.UserLogin(&flag)
+	resp, err := u.userLogin(&flag)
 	if err != nil {
 		return types.UserLoginUserDataResponse{}, err
 	}
@@ -110,3 +110,49 @@ func (u *UserAPI) GetUserData() (types.UserLoginUserDataResponse, error) {
 }
 
 // This is the implementation of the user.create method in the Zabbix API.
+func (u *UserAPI) UserCreate(username string, options ...func(*types.UserCreateRequest)) (*types.UserCreateResult, error) {
+	reqBody := types.UserCreateRequest{
+		JSONRPC: DefaultJSONRPC,
+		Method:  UserCreate,
+		Params: types.UserCreateParams{
+			Username: username,
+		},
+		ID: 1,
+	}
+
+	for _, opt := range options {
+		opt(&reqBody)
+	}
+
+	reqBytes, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(DefaultPost, u.Config.URL, bytes.NewBuffer(reqBytes))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", DefaultContentType)
+	req.Header.Set("Authorization", "Bearer "+u.Config.AuthToken)
+
+	resp, err := u.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	var resBody types.UserCreateResponse
+	if err := json.NewDecoder(resp.Body).Decode(&resBody); err != nil {
+		return nil, err
+	}
+
+	if resBody.Error != nil {
+		return nil, fmt.Errorf("create failed: %d %v %v", resBody.Error.Code, resBody.Error.Message, resBody.Error.Data)
+	}
+
+	return resBody.Result, nil
+}

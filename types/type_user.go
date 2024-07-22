@@ -69,52 +69,55 @@ type UserLoginUserDataResponse struct {
 }
 
 // Here are the struct definitions for the request and response of the user.create method.
-type CreateUserParams struct {
-	UserID          *int            `json:"userid,omitempty"`
-	Username        *string         `json:"username,omitempty"`
-	Password        *string         `json:"passwd,omitempty"`
-	RoleID          *int            `json:"roleid,omitempty"`
-	AttemptClock    *int64          `json:"attempt_clock,omitempty"`
-	AttemptFailed   *int            `json:"attempt_failed,omitempty"`
-	AttemptIP       *string         `json:"attempt_ip,omitempty"`
-	Autologin       *int            `json:"autologin,omitempty"`
-	Autologout      *string         `json:"autologout,omitempty"`
-	Lang            *string         `json:"lang,omitempty"`
-	Name            *string         `json:"name,omitempty"`
-	Refresh         *string         `json:"refresh,omitempty"`
-	RowsPerPage     *int            `json:"rows_per_page,omitempty"`
-	Surname         *string         `json:"surname,omitempty"`
-	Theme           *string         `json:"theme,omitempty"`
-	TSProvisioned   *int64          `json:"ts_provisioned,omitempty"`
-	URL             *string         `json:"url,omitempty"`
-	UserDirectoryID *int            `json:"userdirectoryid,omitempty"`
-	UsrGrps         []*UsrGrpParams `json:"usrgrps,omitempty"`
-	Medias          []*MediaParams  `json:"medias,omitempty"`
-}
-
 type UserCreateRequest struct {
 	JSONRPC string           `json:"jsonrpc"`
 	Method  string           `json:"method"`
-	Params  CreateUserParams `json:"params"`
+	Params  UserCreateParams `json:"params"`
 	ID      int              `json:"id"`
 }
 
-type UsrGrpParams struct {
-	UsrGrpID        *int    `json:"usrgrpid,omitempty"`
-	Name            *string `json:"name,omitempty"`
-	DebugMode       *int    `json:"debug_mode,omitempty"`
-	GUIAccess       *int    `json:"gui_access,omitempty"`
-	MFAStatus       *int    `json:"mfa_status,omitempty"`
-	MFAID           *int    `json:"mfaid,omitempty"`
-	UsersStatus     *int    `json:"users_status,omitempty"`
-	UserDirectoryID *int    `json:"userdirectoryid,omitempty"`
+type UserCreateParams struct {
+	Username    string         `json:"username"`
+	Passwd      string         `json:"passwd,omitempty"`
+	RoleID      string         `json:"roleid,omitempty"`
+	AutoLogin   int            `json:"autologin,omitempty"`
+	AutoLogout  string         `json:"autologout,omitempty"`
+	Lang        string         `json:"lang,omitempty"`
+	Name        string         `json:"name,omitempty"`
+	Refresh     string         `json:"refresh,omitempty"`
+	RowsPerPage string         `json:"rows_per_page,omitempty"`
+	Surname     string         `json:"surname,omitempty"`
+	Theme       string         `json:"theme,omitempty"`
+	URL         string         `json:"url,omitempty"`
+	Usrgrps     []UsrgrpParams `json:"usrgrps,omitempty"`
+	Medias      []MediaParams  `json:"medias,omitempty"`
+}
+
+type UsrgrpParams struct {
+	UsrgrpID string `json:"usrgrpid"`
 }
 
 type MediaParams struct {
-	MediaTypeID          *int      `json:"mediatypeid,omitempty"`
-	SendTo               *[]string `json:"sendto,omitempty"`
-	Active               *int      `json:"active,omitempty"`
-	Severity             *int      `json:"severity,omitempty"`
-	Period               *string   `json:"period,omitempty"`
-	UserDirectoryMediaID *int      `json:"userdirectory_mediaid,omitempty"`
+	MediaTypeID string   `json:"mediatypeid"`
+	SendTo      []string `json:"sendto"`
+	Active      int      `json:"active"`
+	Severity    int      `json:"severity"`
+	Period      string   `json:"period"`
+}
+
+type UserCreateResponse struct {
+	Jsonrpc string            `json:"jsonrpc"`
+	Result  *UserCreateResult `json:"result,omitempty"`
+	Error   *UserCreateError  `json:"error,omitempty"`
+	ID      int               `json:"id"`
+}
+
+type UserCreateResult struct {
+	UserIDs []string `json:"userids"`
+}
+
+type UserCreateError struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    string `json:"data"`
 }

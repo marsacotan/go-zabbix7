@@ -34,7 +34,7 @@ func CreateTLSVerifyHTTPClient(caCertPath string) *http.Client {
 
 	caCert, err := os.ReadFile(caCertPath)
 	if err != nil {
-		log.Fatalf("Failed to read CA cert file: %v", err)
+		log.Fatalf("TLS authentication is required by default, and cannot read the CA certificate file: %v", err)
 	}
 
 	caCertPool := x509.NewCertPool()
