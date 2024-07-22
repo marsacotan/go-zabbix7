@@ -15,16 +15,20 @@
 
 package api
 
-import (
-	"net/http"
-)
+import "net/http"
 
 type API struct {
 	Config *Config
 	User   UserAPI
+	Host   HostAPI
 }
 
 type UserAPI struct {
+	Config *Config
+	Client *http.Client
+}
+
+type HostAPI struct {
 	Config *Config
 	Client *http.Client
 }

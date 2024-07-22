@@ -2,37 +2,22 @@
 // Use of this source code is governed by an Apache-2.0 license
 // that can be found in the LICENSE file.
 //
-// Package api provides methods for interacting with user-related functionalities
-// in the Zabbix API.
-//
-// The main functionalities encapsulated in this file include:
-// - user.checkAuthentication
-// - user.create
-// - user.delete
-// - user.get
-// - user.login
-// - user.logout
-// - user.provision
-// - user.resettotp
-// - user.unblock
-// - user.update
-//
-// These methods facilitate authentication, management, and manipulation of user
-// entities within a Zabbix system using the JSON-RPC protocol.
+// The api package provides methods to interact with Zabbix API functionalities.
+// These methods use the JSON-RPC protocol to facilitate authentication, management,
+// and operations of user entities within the Zabbix system.
 
 package api
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/marsacotan/go-zabbix7/types"
+	"github.com/marsacotan/go-zabbix7/utils"
 )
 
-// UserLogin performs the user.login method in the Zabbix API.
-// It returns either UserLoginTokenResponse or UserLoginUserDataResponse based on the userData parameter.
+// This is the implementation of the user.user.login method in the Zabbix API.
 func (u *UserAPI) userLogin(userData *bool) (interface{}, error) {
 	reqBody := types.UserLoginRequest{
 		JSONRPC: DefaultJSONRPC,
@@ -44,18 +29,7 @@ func (u *UserAPI) userLogin(userData *bool) (interface{}, error) {
 		},
 		ID: 1,
 	}
-	reqBytes, err := json.Marshal(reqBody)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(DefaultPost, u.Config.URL, bytes.NewBuffer(reqBytes))
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("Content-Type", DefaultContentType)
-
+	req := utils.SendReqBody(reqBody, u.Config.URL, DefaultPost, DefaultContentType, u.Config.AuthToken)
 	resp, err := u.Client.Do(req)
 	if err != nil {
 		return nil, err
@@ -81,7 +55,6 @@ func (u *UserAPI) userLogin(userData *bool) (interface{}, error) {
 	}
 }
 
-// GetToken retrieves the user login token.
 func (u *UserAPI) GetToken() (types.UserLoginTokenResponse, error) {
 	var flag bool = false
 	resp, err := u.userLogin(&flag)
@@ -95,7 +68,6 @@ func (u *UserAPI) GetToken() (types.UserLoginTokenResponse, error) {
 	return tokenResp, nil
 }
 
-// GetUserData retrieves the user data.
 func (u *UserAPI) GetUserData() (types.UserLoginUserDataResponse, error) {
 	var flag bool = true
 	resp, err := u.userLogin(&flag)
@@ -124,23 +96,14 @@ func (u *UserAPI) UserCreate(username string, options ...func(*types.UserCreateR
 		opt(&reqBody)
 	}
 
-	reqBytes, err := json.Marshal(reqBody)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(DefaultPost, u.Config.URL, bytes.NewBuffer(reqBytes))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", DefaultContentType)
-	req.Header.Set("Authorization", "Bearer "+u.Config.AuthToken)
-
+	req := utils.SendReqBody(reqBody, u.Config.URL, DefaultPost, DefaultContentType, u.Config.AuthToken)
 	resp, err := u.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
+
 	defer resp.Body.Close()
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
@@ -152,6 +115,72 @@ func (u *UserAPI) UserCreate(username string, options ...func(*types.UserCreateR
 
 	if resBody.Error != nil {
 		return nil, fmt.Errorf("create failed: %d %v %v", resBody.Error.Code, resBody.Error.Message, resBody.Error.Data)
+	}
+
+	return resBody.Result, nil
+}
+
+// This is the implementation of the user.delete method in the Zabbix API.
+func (u *UserAPI) UserDelete(arrayUsersId []string) (*types.UserDeleteResult, error) {
+	reqBody := types.UserDeleteRequest{
+		JSONRPC: DefaultJSONRPC,
+		Method:  UserDelete,
+		Params:  arrayUsersId,
+		ID:      1,
+	}
+
+	req := utils.SendReqBody(reqBody, u.Config.URL, DefaultPost, DefaultContentType, u.Config.AuthToken)
+	resp, err := u.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	var resBody types.UserDeleteResponse
+	if err := json.NewDecoder(resp.Body).Decode(&resBody); err != nil {
+		return nil, err
+	}
+
+	if resBody.Error != nil {
+		return nil, fmt.Errorf("delete failed: %d %v %v", resBody.Error.Code, resBody.Error.Message, resBody.Error.Data)
+	}
+
+	return resBody.Result, nil
+}
+
+// This is the implementation of the user.unblock method in the Zabbix API.
+func (u *UserAPI) UserUnblock(arrayUsersId []string) (*types.UserUnblockResult, error) {
+	reqBody := types.UserUnblockRequest{
+		JSONRPC: DefaultJSONRPC,
+		Method:  UserUnblock,
+		Params:  arrayUsersId,
+		ID:      1,
+	}
+
+	req := utils.SendReqBody(reqBody, u.Config.URL, DefaultPost, DefaultContentType, u.Config.AuthToken)
+	resp, err := u.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	var resBody types.UserUnblockResponse
+	if err := json.NewDecoder(resp.Body).Decode(&resBody); err != nil {
+		return nil, err
+	}
+
+	if resBody.Error != nil {
+		return nil, fmt.Errorf("unblock failed: %d %v %v", resBody.Error.Code, resBody.Error.Message, resBody.Error.Data)
 	}
 
 	return resBody.Result, nil

@@ -21,5 +21,6 @@ func NewClient(config *Config) *API {
 	return &API{
 		Config: config,
 		User:   UserAPI{Config: config, Client: httpClient},
+		Host:   HostAPI{Config: config, Client: httpClient},
 	}
 }

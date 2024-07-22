@@ -24,6 +24,10 @@ const (
 	DefaultContentType = "application/json-rpc"
 
 	// All methods are defined here.
-	UserLogin  = "user.login"
-	UserCreate = "user.create"
+	UserLogin   = "user.login"
+	UserCreate  = "user.create"
+	UserDelete  = "user.delete"
+	UserUnblock = "user.unblock"
+
+	HostCreate = "host.create"
 )

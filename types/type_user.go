@@ -106,7 +106,7 @@ type MediaParams struct {
 }
 
 type UserCreateResponse struct {
-	Jsonrpc string            `json:"jsonrpc"`
+	JSONRPC string            `json:"jsonrpc"`
 	Result  *UserCreateResult `json:"result,omitempty"`
 	Error   *UserCreateError  `json:"error,omitempty"`
 	ID      int               `json:"id"`
@@ -117,6 +117,56 @@ type UserCreateResult struct {
 }
 
 type UserCreateError struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    string `json:"data"`
+}
+
+// Here are the struct definitions for the request and response of the user.delete method.
+type UserDeleteRequest struct {
+	JSONRPC string   `json:"jsonrpc"`
+	Method  string   `json:"method"`
+	Params  []string `json:"params"`
+	ID      int      `json:"id"`
+}
+
+type UserDeleteResponse struct {
+	JSONRPC string            `json:"jsonrpc"`
+	Result  *UserDeleteResult `json:"result,omitempty"`
+	Error   *UserDeleteError  `json:"error,omitempty"`
+	ID      int               `json:"id"`
+}
+
+type UserDeleteResult struct {
+	UserIDs []string `json:"userids"`
+}
+
+type UserDeleteError struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    string `json:"data"`
+}
+
+// Here are the struct definitions for the request and response of the user.unblock method.
+type UserUnblockRequest struct {
+	JSONRPC string   `json:"jsonrpc"`
+	Method  string   `json:"method"`
+	Params  []string `json:"params"`
+	ID      int      `json:"id"`
+}
+
+type UserUnblockResponse struct {
+	JSONRPC string             `json:"jsonrpc"`
+	Result  *UserUnblockResult `json:"result,omitempty"`
+	Error   *UserUnblockError  `json:"error,omitempty"`
+	ID      int                `json:"id"`
+}
+
+type UserUnblockResult struct {
+	UserIDs []string `json:"userids"`
+}
+
+type UserUnblockError struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Data    string `json:"data"`

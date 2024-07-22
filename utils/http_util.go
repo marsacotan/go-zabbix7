@@ -16,8 +16,10 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -48,4 +50,25 @@ func CreateTLSVerifyHTTPClient(caCertPath string) *http.Client {
 	}
 
 	return &http.Client{Transport: tr}
+}
+
+func SendReqBody(reqBody interface{}, url string, reqMethod string, contentType string, token ...string) *http.Request {
+	reqBytes, err := json.Marshal(reqBody)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	req, err := http.NewRequest(reqMethod, url, bytes.NewBuffer(reqBytes))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if len(token) != 0 {
+		req.Header.Set("Content-Type", contentType)
+		req.Header.Set("Authorization", "Bearer "+token[0])
+	} else {
+		req.Header.Set("Content-Type", contentType)
+	}
+
+	return req
 }
