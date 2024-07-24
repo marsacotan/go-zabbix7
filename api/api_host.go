@@ -17,13 +17,12 @@ import (
 	"github.com/marsacotan/go-zabbix7/utils"
 )
 
-func (u *HostAPI) HostCreate(hostname string, groupid []types.GroupArray, options ...func(*types.HostCreateRequest)) (*types.HostCreateResult, error) {
+func (u *HostAPI) HostCreate(hostname string, options ...func(*types.HostCreateRequest)) (*types.HostCreateResult, error) {
 	reqBody := types.HostCreateRequest{
 		JSONRPC: DefaultJSONRPC,
 		Method:  HostCreate,
 		Params: types.HostCreateParams{
-			Host:   hostname,
-			Groups: groupid,
+			Host: hostname,
 		},
 		ID: 1,
 	}

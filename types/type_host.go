@@ -20,38 +20,38 @@ type HostCreateRequest struct {
 }
 
 type HostCreateParams struct {
-	HostId            int               `json:"hostid,omitempty"`
-	Host              string            `json:"host,omitempty"`
-	Description       string            `json:"description,omitempty"`
-	Flags             int               `json:"flags,omitempty"`
-	InventoryMode     int               `json:"inventory_mode,omitempty"`
-	IpmiAuthtype      int               `json:"ipmi_authtype,omitempty"`
-	IpmiPassword      string            `json:"ipmi_password,omitempty"`
-	IpmiPrivilege     int               `json:"ipmi_privilege,omitempty"`
-	IpmiUsername      string            `json:"ipmi_username,omitempty"`
-	MaintenanceFrom   int64             `json:"maintenance_from,omitempty"`
-	MaintenanceStatus int               `json:"maintenance_status,omitempty"`
-	MaintenanceType   int               `json:"maintenance_type,omitempty"`
-	Maintenanceid     int               `json:"maintenanceid,omitempty"`
-	Name              string            `json:"name,omitempty"`
-	MonitoredBy       int               `json:"monitored_by,omitempty"`
-	ProxyId           int               `json:"proxyid,omitempty"`
-	ProxyGroupid      int               `json:"proxy_groupid,omitempty"`
-	Status            int               `json:"status,omitempty"`
-	TlsConnect        int               `json:"tls_connect,omitempty"`
-	TlsAccept         int               `json:"tls_accept,omitempty"`
-	TlsIssuer         string            `json:"tls_issuer,omitempty"`
-	TlsSubject        string            `json:"tls_subject,omitempty"`
-	TlsPskIdentity    string            `json:"tls_psk_identity,omitempty"`
-	TlsPsk            string            `json:"tls_psk,omitempty"`
-	ActiveAvailable   int               `json:"active_available,omitempty"`
-	AssignedProxyid   int               `json:"assigned_proxyid,omitempty"`
-	Groups            []GroupArray      `json:"groups,omitempty"`
-	Interfaces        []InterfacesArray `json:"interfaces,omitempty"`
-	Tags              []TagArray        `json:"tags,omitempty"`
-	Templates         []TemplatesArray  `json:"templates,omitempty"`
-	Macros            []MacrosArray     `json:"macros,omitempty"`
-	Inventory         InventoryParams   `json:"inventory,omitempty"`
+	HostId            int             `json:"hostid,omitempty"`
+	Host              string          `json:"host,omitempty"`
+	Description       string          `json:"description,omitempty"`
+	Flags             int             `json:"flags,omitempty"`
+	InventoryMode     int             `json:"inventory_mode,omitempty"`
+	IpmiAuthtype      int             `json:"ipmi_authtype,omitempty"`
+	IpmiPassword      string          `json:"ipmi_password,omitempty"`
+	IpmiPrivilege     int             `json:"ipmi_privilege,omitempty"`
+	IpmiUsername      string          `json:"ipmi_username,omitempty"`
+	MaintenanceFrom   int64           `json:"maintenance_from,omitempty"`
+	MaintenanceStatus int             `json:"maintenance_status,omitempty"`
+	MaintenanceType   int             `json:"maintenance_type,omitempty"`
+	Maintenanceid     int             `json:"maintenanceid,omitempty"`
+	Name              string          `json:"name,omitempty"`
+	MonitoredBy       int             `json:"monitored_by,omitempty"`
+	ProxyId           int             `json:"proxyid,omitempty"`
+	ProxyGroupid      int             `json:"proxy_groupid,omitempty"`
+	Status            int             `json:"status,omitempty"`
+	TlsConnect        int             `json:"tls_connect,omitempty"`
+	TlsAccept         int             `json:"tls_accept,omitempty"`
+	TlsIssuer         string          `json:"tls_issuer,omitempty"`
+	TlsSubject        string          `json:"tls_subject,omitempty"`
+	TlsPskIdentity    string          `json:"tls_psk_identity,omitempty"`
+	TlsPsk            string          `json:"tls_psk,omitempty"`
+	ActiveAvailable   int             `json:"active_available,omitempty"`
+	AssignedProxyid   int             `json:"assigned_proxyid,omitempty"`
+	Groups            GroupArray      `json:"groups,omitempty"`
+	Interfaces        InterfacesArray `json:"interfaces,omitempty"`
+	Tags              TagArray        `json:"tags,omitempty"`
+	Templates         TemplatesArray  `json:"templates,omitempty"`
+	Macros            MacrosArray     `json:"macros,omitempty"`
+	Inventory         InventoryParams `json:"inventory,omitempty"`
 }
 
 type GroupArray struct {
@@ -98,7 +98,7 @@ type TagArray struct {
 }
 
 type TemplatesArray struct {
-	Templateid    int    `json:"templateid,omitempty"`
+	Templateid    string `json:"templateid,omitempty"`
 	Host          string `json:"host,omitempty"`
 	Description   string `json:"description,omitempty"`
 	Name          string `json:"name,omitempty"`
