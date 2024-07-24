@@ -8,6 +8,50 @@
 
 package api
 
-func (h *HostAPI) HostCreate() {
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
 
+	"github.com/marsacotan/go-zabbix7/types"
+	"github.com/marsacotan/go-zabbix7/utils"
+)
+
+func (u *HostAPI) HostCreate(hostname string, groupid []types.GroupArray, options ...func(*types.HostCreateRequest)) (*types.HostCreateResult, error) {
+	reqBody := types.HostCreateRequest{
+		JSONRPC: DefaultJSONRPC,
+		Method:  HostCreate,
+		Params: types.HostCreateParams{
+			Host:   hostname,
+			Groups: groupid,
+		},
+		ID: 1,
+	}
+
+	for _, opt := range options {
+		opt(&reqBody)
+	}
+
+	req := utils.SendReqBody(reqBody, u.Config.URL, DefaultPost, DefaultContentType, u.Config.AuthToken)
+	resp, err := u.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	var resBody types.HostCreateResponse
+	if err := json.NewDecoder(resp.Body).Decode(&resBody); err != nil {
+		return nil, err
+	}
+
+	if resBody.Error != nil {
+		return nil, fmt.Errorf("create failed: %d %v %v", resBody.Error.Code, resBody.Error.Message, resBody.Error.Data)
+	}
+
+	return resBody.Result, nil
 }

@@ -98,11 +98,11 @@ type UsrgrpParams struct {
 }
 
 type MediaParams struct {
-	MediaTypeID string   `json:"mediatypeid"`
-	SendTo      []string `json:"sendto"`
-	Active      int      `json:"active"`
-	Severity    int      `json:"severity"`
-	Period      string   `json:"period"`
+	MediaTypeID string   `json:"mediatypeid,omitempty"`
+	SendTo      []string `json:"sendto,omitempty"`
+	Active      int      `json:"active,omitempty"`
+	Severity    int      `json:"severity,omitempty"`
+	Period      string   `json:"period,omitempty"`
 }
 
 type UserCreateResponse struct {
