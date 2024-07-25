@@ -204,3 +204,27 @@ type HostCreateError struct {
 	Message string `json:"message"`
 	Data    string `json:"data"`
 }
+
+type HostDeleteRequest struct {
+	JSONRPC string   `json:"jsonrpc"`
+	Method  string   `json:"method"`
+	Params  []string `json:"params"`
+	ID      int      `json:"id"`
+}
+
+type HostDeleteResponse struct {
+	JSONRPC string            `json:"jsonrpc"`
+	Result  *HostDeleteResult `json:"result,omitempty"`
+	Error   *HostDeleteError  `json:"error,omitempty"`
+	ID      int               `json:"id"`
+}
+
+type HostDeleteResult struct {
+	HostIDs []string `json:"hostids"`
+}
+
+type HostDeleteError struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    string `json:"data"`
+}

@@ -30,4 +30,5 @@ const (
 	UserUnblock = "user.unblock"
 
 	HostCreate = "host.create"
+	HostDelete = "host.delete"
 )
