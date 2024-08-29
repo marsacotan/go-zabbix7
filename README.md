@@ -47,7 +47,17 @@ func main() {
 ```
 ### 2. Three ways to obtain and use a token, using host creation as an example.
 
-#### You can obtain the token using the account credentials, then set the token like this: client.Config.AuthToken = token.
+There are three ways to set the token:
+
+Obtain the token by logging in directly with your account and password.
+Set the existing token in an environment variable.
+Set the existing token in the created client, for example, client.Config.AuthToken = your_token.
+
+Below are specific usage examples. The provided code is functional, and you can extend it based on your requirements.
+
+---
+
+1. You can obtain the token using the account credentials, then set the token like this: client.Config.AuthToken = token.
 ```go
 package main
 
@@ -75,7 +85,7 @@ func main() {
 }
 ```
 
-#### You can obtain the pre-set token from the environment variable and use the WithExistingToken method to utilize this token.
+2. You can obtain the pre-set token from the environment variable and use the WithExistingToken method to utilize this token.
 ```go
 package main
 
@@ -98,7 +108,7 @@ func main() {
 }
 ```
 
-#### You can also directly set the existing token to client.Config.AuthToken.
+3. You can also directly set the existing token to client.Config.AuthToken.
 ```go
 package main
 
@@ -120,7 +130,6 @@ func main() {
 	fmt.Println(result.HostIDs)
 }
 ```
-
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
