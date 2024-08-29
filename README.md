@@ -46,8 +46,19 @@ func main() {
 }
 ```
 ### 2. Three ways to obtain and use a token, using host creation as an example.
+
+#### You can obtain the token using the account credentials, then set the token like this: client.Config.AuthToken = token.
 ```go
-	// You can obtain the token using the account credentials, then set the token like this: client.Config.AuthToken = token.
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/marsacotan/go-zabbix7/api"
+)
+
+func main() {
 	config := api.ConfigConn("https://192.168.88.77/api_jsonrpc.php").WithSkipTlsVerify(true).WithLoginCred("Admin", "zabbix")
 	client := api.NewClient(config)
 	res, err := client.User.GetToken()
@@ -60,8 +71,21 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+```
 
-	// You can obtain the pre-set token from the environment variable and use the WithExistingToken method to utilize this token.
+#### You can obtain the pre-set token from the environment variable and use the WithExistingToken method to utilize this token.
+```go
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/marsacotan/go-zabbix7/api"
+)
+
+func main() {
 	token := api.WithEnvToken("ZABBIX7_API_TOKEN")
 	config := api.ConfigConn("https://192.168.88.77/api_jsonrpc.php").WithSkipTlsVerify(true).WithExistingToken(token).WithExistingToken(token)
 	client := api.NewClient(config)
@@ -70,8 +94,21 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(result.HostIDs)
+}
+```
 
-	// You can also directly set the existing token to client.Config.AuthToken.
+#### You can also directly set the existing token to client.Config.AuthToken.
+```go
+package main
+
+import (
+	"fmt"
+	"testing"
+
+	"github.com/marsacotan/go-zabbix7/api"
+)
+
+func main() {
 	config := api.ConfigConn("https://192.168.88.77/api_jsonrpc.php").WithSkipTlsVerify(true)
 	client := api.NewClient(config)
 	client.Config.AuthToken = "136405daf4b2f6ce3d0e8fa08dd765ad"
@@ -80,7 +117,9 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(result.HostIDs)
+}
 ```
+
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
