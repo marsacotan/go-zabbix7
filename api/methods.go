@@ -19,16 +19,20 @@
 package api
 
 const (
+	// Request definition for a method
 	DefaultPost        = "POST"
 	DefaultJSONRPC     = "2.0"
 	DefaultContentType = "application/json-rpc"
 
-	// All methods are defined here.
+	// The methods of the Zabbix API are defined here
+
+	// User
 	UserLogin   = "user.login"
 	UserCreate  = "user.create"
 	UserDelete  = "user.delete"
 	UserUnblock = "user.unblock"
 
+	// Host
 	HostCreate = "host.create"
 	HostDelete = "host.delete"
 )

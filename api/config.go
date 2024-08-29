@@ -21,7 +21,9 @@
 
 package api
 
-import "github.com/marsacotan/go-zabbix7/utils"
+import (
+	"github.com/marsacotan/go-zabbix7/utils"
+)
 
 type Config struct {
 	URL                string
@@ -44,7 +46,7 @@ func (c *Config) WithLoginCred(user, passwd string) *Config {
 	return c
 }
 
-func (c *Config) WithToken(token string) *Config {
+func (c *Config) WithExistingToken(token string) *Config {
 	c.AuthToken = token
 	return c
 }
@@ -59,6 +61,6 @@ func (c *Config) WithCertPath(certPath string) *Config {
 	return c
 }
 
-func WithLocalEnvToken(envVar string) string {
+func WithEnvToken(envVar string) string {
 	return utils.GetEnv(envVar)
 }

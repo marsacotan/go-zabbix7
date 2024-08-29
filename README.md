@@ -16,6 +16,8 @@ This library does not support Windows.
 If you encounter issues while using this library on Windows, please consider using a Unix-based operating system such as Linux or macOS for development and deployment.
 
 ## Usage
+
+### 1. Example of obtaining a token
 ```go
 package main
 
@@ -26,9 +28,6 @@ import (
 )
 
 func main() {
-	// Supports environment variables; you need to set an available token.
-	// api.WithLocalEnvToken("ZABBIX7_API_TOKEN")
-
 	// Supports skipping TLS verification; you can use HTTP or HTTPS.
 	// config := api.ConfigConn("https://192.168.88.77/api_jsonrpc.php").WithLoginCred("Admin", "zabbix").WithSkipTlsVerify(true)
 
@@ -46,7 +45,42 @@ func main() {
 	log.Printf("token: %v", resp.Result)
 }
 ```
+### 2. Three ways to obtain and use a token, using host creation as an example.
+```go
+	// You can obtain the token using the account credentials, then set the token like this: client.Config.AuthToken = token.
+	config := api.ConfigConn("https://192.168.88.77/api_jsonrpc.php").WithSkipTlsVerify(true).WithLoginCred("Admin", "zabbix")
+	client := api.NewClient(config)
+	res, err := client.User.GetToken()
+	if err != nil {
+		fmt.Println(err)
+	}
+	token := res.Result
+	client.Config.AuthToken = token
+	result, err := client.Host.HostCreate("testhost", "2")
+	if err != nil {
+		fmt.Println(err)
+	}
 
+	// You can obtain the pre-set token from the environment variable and use the WithExistingToken method to utilize this token.
+	token := api.WithEnvToken("ZABBIX7_API_TOKEN")
+	config := api.ConfigConn("https://192.168.88.77/api_jsonrpc.php").WithSkipTlsVerify(true).WithExistingToken(token).WithExistingToken(token)
+	client := api.NewClient(config)
+	result, err := client.Host.HostCreate("testhost", "2")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(result.HostIDs)
+
+	// You can also directly set the existing token to client.Config.AuthToken.
+	config := api.ConfigConn("https://192.168.88.77/api_jsonrpc.php").WithSkipTlsVerify(true)
+	client := api.NewClient(config)
+	client.Config.AuthToken = "136405daf4b2f6ce3d0e8fa08dd765ad"
+	result, err := client.Host.HostCreate("testhost", "2")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(result.HostIDs)
+```
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
